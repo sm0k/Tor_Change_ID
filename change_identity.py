@@ -1,9 +1,14 @@
 #!/usr/bin/python
 
-import socket
+# Must be run through a tor proxychains 
 
-def change_identify(tor_password="",tor_control_socket="/var/run/tor/control",
-tor_cookie="/var/run/tor/control.authcookie",tor_host="localhost",tor_port=9051):
+import socket
+from termcolor import colored
+import requests
+import time
+
+def change_identity(tor_password="",tor_control_socket="/var/run/tor/control",
+tor_cookie="/var/run/tor/control.authcookie",tor_host="localhost",tor_port=9051,debug=False):
 
 	try:
 
@@ -36,13 +41,15 @@ tor_cookie="/var/run/tor/control.authcookie",tor_host="localhost",tor_port=9051)
 		
 		f.close()
 		s.close()
-		
+
+		if debug:
+			r=requests.get("http://ifconfig.me",headers={"User-Agent":"curl"})
+			print colored("[**] New identity : "+r.content, 'green')
+
+		time.sleep(0.1)
 		return True
 	except Exception as e:
 		print "[EE] "+e.message
 		
 if __name__ == '__main__':
-	if change_identify():
-		print "Done"
-	else:
-		print "Fail"
+	change_identity(debug=True)
