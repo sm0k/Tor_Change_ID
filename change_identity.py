@@ -8,7 +8,7 @@ import requests
 import time
 
 def change_identity(tor_password="",tor_control_socket="/var/run/tor/control",
-tor_cookie="/var/run/tor/control.authcookie",tor_host="localhost",tor_port=9051,debug=False):
+tor_cookie="/var/run/tor/control.authcookie",tor_host="localhost",tor_port=9051,debug=False,sleep_time=0.5):
 
 	try:
 
@@ -46,7 +46,7 @@ tor_cookie="/var/run/tor/control.authcookie",tor_host="localhost",tor_port=9051,
 			r=requests.get("http://ifconfig.me",headers={"User-Agent":"curl"})
 			print colored("[**] New identity : "+r.content, 'green')
 
-		time.sleep(0.1)
+		time.sleep(sleep_time)
 		return True
 	except Exception as e:
 		print "[EE] "+e.message
