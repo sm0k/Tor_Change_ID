@@ -44,7 +44,7 @@ tor_cookie="/var/run/tor/control.authcookie",tor_host="localhost",tor_port=9051,
 
 		if debug:
 			r=requests.get("http://ifconfig.me",headers={"User-Agent":"curl"})
-			print colored("[**] New identity : "+r.content, 'green')
+			print colored("[**] New identity : "+r.content.replace('\n',"").replace('\r',''), 'green')
 
 		time.sleep(sleep_time)
 		return True
