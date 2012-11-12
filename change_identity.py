@@ -6,6 +6,7 @@ import socket
 from termcolor import colored
 import requests
 import time
+import sys
 
 def change_identity(tor_password="",tor_control_socket="/var/run/tor/control",
 tor_cookie="/var/run/tor/control.authcookie",tor_host="localhost",tor_port=9051,debug=False,sleep_time=0.5):
@@ -20,9 +21,9 @@ tor_cookie="/var/run/tor/control.authcookie",tor_host="localhost",tor_port=9051,
 			
 		else:
 			s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-			s.connect("/var/run/tor/control")
+			s.connect(tor_control_socket)
 
-			f=open("/var/run/tor/control.authcookie")
+			f=open(tor_cookie)
 
 			token=f.read()
 
@@ -49,7 +50,16 @@ tor_cookie="/var/run/tor/control.authcookie",tor_host="localhost",tor_port=9051,
 		time.sleep(sleep_time)
 		return True
 	except Exception as e:
-		print "[EE] "+e.message
+		print "[EE] "+str(e.message)
 		
 if __name__ == '__main__':
-	change_identity(debug=True)
+	if len(sys.argv)<2:
+		change_identity(debug=True)
+	else:
+		while 1:
+			
+			change_identity(debug=True)
+			
+			print colored("[**] Sleeping for %d" % (int(sys.argv[1])), 'yellow')
+			time.sleep(int(sys.argv[1]))
+			
